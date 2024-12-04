@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+<style>
+.action-button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+    border: 1px solid rgb(190, 190, 190);
+    color: rgb(70, 70, 70);
+    font-weight: 700;
+}
+</style>
+</head>
+<body>
+    <p>Марка: {{ car.make }}</p>
+    <p>Модель: {{ car.model }}</p>
+    <p>Год выпуска: {{ car.year }}</p>
+    <p>Описание: {{ car.description }}</p>
+    <p>Опубликовано: {{ car.created_at }}</p>
+    <p>Запись обновлена: {{ car.updated_at }}</p>
+    <p>Владелец публикации: {{ car.owner }}</p>
+<body>

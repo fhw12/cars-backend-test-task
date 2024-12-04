@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+<style>
+.car-card {
+    background-color: rgb(240, 240, 240);
+    color: rgb(40, 40, 40);
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 7px;
+}
+
+.link {
+    text-decoration: none;
+    padding: 3px;   
+    background-color: rgb(200, 200, 200);
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 5px;
+    color: rgb(70, 70, 70);
+    font-weight: 700;
+}
+</style>
+</head>
+<body>
+{% if cars %}
+    {% for car in cars %}
+        <div class="car-card">
+            <div>Марка: {{ car.make }}</div>
+            <div style="margin-bottom: 15px;">Модель: {{ car.model }}</div>
+            <a class="link" href="{% url 'car details' car.id %}">Подробнее</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Нет записей о машинах</p>
+{% endif %}
+<body>
