@@ -1,0 +1,28 @@
+{% extends "cars/base.html" %}
+{% block content %}
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+    }
+
+    input {
+        padding: 10px;
+    }
+</style>
+<div class="container">
+    <form method="post" action="reg/">
+        {% csrf_token %}
+        <label for="username">Логин:</label><br>
+        <input name="username" id="username" placeholder="4-16 символов" pattern="[a-zA-Z0-9]{4,16}" required><br><br>
+
+        <label for="password">Пароль:</label><br>
+        <input name="password" id="password" placeholder="от 8 символов" pattern=".{8,}" required><br><br>
+
+        <label for="repeated_password">Повторите пароль:</label><br>
+        <input name="repeated_password" id="repeated_password" placeholder="Повторите пароль" pattern=".{8,}" required><br><br>
+
+        <input class="action-button" style="width: 100%;" type="submit" value="Зарегистрироваться">
+    </form>
+</div>
+{% endblock content %}

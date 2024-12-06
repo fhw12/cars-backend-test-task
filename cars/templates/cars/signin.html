@@ -1,0 +1,25 @@
+{% extends "cars/base.html" %}
+{% block content %}
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+    }
+
+    input {
+        padding: 10px;
+    }
+</style>
+<div class="container">
+    <form method="post" action="login/">
+        {% csrf_token %}
+        <label for="username">Логин:</label><br>
+        <input name="username" id="username" placeholder="Ваш логин" required><br><br>
+
+        <label for="password">Пароль:</label><br>
+        <input name="password" id="password" placeholder="Ваш пароль" required><br><br>
+
+        <input class="action-button" style="width: 100%;" type="submit" value="Войти">
+    </form>
+</div>
+{% endblock content %}

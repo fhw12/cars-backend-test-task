@@ -1,0 +1,23 @@
+{% extends "cars/base.html" %}
+{% block content %}
+<style>
+
+</style>
+
+<p>Информация о публикации:</p>
+<form method="post" action="/add-car/">
+    {% csrf_token %}
+    <label for="make">Марка:</label>
+    <input name="make" id="make" value="{{ car.make }}"><br>
+
+    <label for="model">Модель:</label>
+    <input name="model" id="model" value="{{ car.model }}"><br>
+
+    <label for="year">Год выпуска:</label>
+    <input name="year" id="year" value="{{ car.year }}"><br>
+
+    <label for="description">Описание:</label>
+    <textarea name="description" id="description">{{ car.description }}</textarea><br>
+    <button type="submit" class="action-button">Обновить</button><br><br>
+</form>
+{% endblock content %}

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<head>
+{% extends "cars/base.html" %}
+{% block content %}
 <style>
 .car-card {
     background-color: rgb(240, 240, 240);
@@ -20,17 +20,15 @@
     font-weight: 700;
 }
 </style>
-</head>
-<body>
 {% if cars %}
     {% for car in cars %}
         <div class="car-card">
             <div>Марка: {{ car.make }}</div>
             <div style="margin-bottom: 15px;">Модель: {{ car.model }}</div>
-            <a class="link" href="{% url 'car details' car.id %}">Подробнее</a>
+            <a class="link" href="{% url 'car-details' car.id %}">Подробнее</a>
         </div>
     {% endfor %}
 {% else %}
     <p>Нет записей о машинах</p>
 {% endif %}
-<body>
+{% endblock content %}

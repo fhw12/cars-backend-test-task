@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+body {
+    margin: 0;
+    user-select: none;
+}
+
+.header {
+    background-color: rgb(220, 220, 220);
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.content {
+    padding: 10px;
+}
+
+.action-button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: rgb(200, 200, 200);
+    border: 1px solid rgb(190, 190, 190);
+    color: rgb(70, 70, 70);
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(20, 20, 20);
+}
+        </style>
+    </head>
+    <body>
+        <header class="header">
+            <a href="{% url 'index' %}">Всё о машинах</a>
+            <span>
+                {% if user.is_authenticated %}
+                    <span style="margin-right: 10px;">Ваш аккаунт: {{ user }}</span>
+                    <a class="action-button" href="{% url 'logout' %}">Выйти</a>
+                    <a class="action-button" href="{% url 'new-car' %}">Добавить машину</a>
+                {% else %}
+                    <a class="action-button" href="{% url 'signin' %}">Войти</a>
+                    <a class="action-button" href="{% url 'signup' %}">Зарегистрироваться</a>
+                {% endif %}
+            </span>
+        </header>
+        <main class="content">
+            {% block content %}
+            {% endblock content %}
+        </main>
+    </body>
+</html>

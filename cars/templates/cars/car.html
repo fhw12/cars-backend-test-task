@@ -1,19 +1,27 @@
-<!DOCTYPE html>
-<head>
+{% extends "cars/base.html" %}
+{% block content %}
 <style>
-.action-button {
-    border: none;
-    border-radius: 5px;
+.car-card, .comment-card {
+    background-color: rgb(240, 240, 240);
+    color: rgb(40, 40, 40);
     padding: 10px;
-    cursor: pointer;
-    background-color: rgb(200, 200, 200);
-    border: 1px solid rgb(190, 190, 190);
-    color: rgb(70, 70, 70);
-    font-weight: 700;
+    margin: 5px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 7px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    padding: 10px;
 }
 </style>
-</head>
-<body>
+
+<p>Информация о машине</p>
+<div class="car-card">
     <p>Марка: {{ car.make }}</p>
     <p>Модель: {{ car.model }}</p>
     <p>Год выпуска: {{ car.year }}</p>
@@ -21,4 +29,47 @@
     <p>Опубликовано: {{ car.created_at }}</p>
     <p>Запись обновлена: {{ car.updated_at }}</p>
     <p>Владелец публикации: {{ car.owner }}</p>
-<body>
+</div>
+
+{% if user.is_authenticated %}
+    {% if user == car.owner %}
+    <br><a class="action-button" href="/delete-car/{{ car.id }}">Удалить</a>
+   
+        <form method="post" action="/edit-car/{{ car.id }}">
+            {% csrf_token %}
+            <p>Редактирование:</p>
+            <label for="make">Марка:</label>
+            <input name="make" id="make" value="{{ car.make }}"><br><br>
+
+            <label for="model">Модель:</label>
+            <input name="model" id="model" value="{{ car.model }}"><br><br>
+
+            <label for="year">Год выпуска:</label>
+            <input name="year" id="year" value="{{ car.year }}"><br><br>
+
+            <label for="description">Описание:</label>
+            <textarea name="description" id="description">{{ car.description }}</textarea><br><br>
+            <button type="submit" class="action-button">Обновить</button><br><br>
+        </form>
+    
+    {% endif %}
+{% endif %}
+
+<p>Комментарии</p>
+{% if user.is_authenticated %}
+    <form method="post" action="/add-comment/{{ car.id }}">
+        {% csrf_token %}
+        <textarea name="content" id="content"></textarea><br><br>
+        <button type="submit" class="action-button">Отправить комментарий</button><br><br>
+    </form>
+{% else %}
+    <p>Войдите в аккаунт для возможности оставлять комментарии</p>
+{% endif %}
+
+{% for comment in comments %}
+    <div class="comment-card">
+        <div>{{ comment.author }} ({{ comment.created_at }})</div>
+        <div>{{ comment.content }}</div>
+    </div>
+{% endfor %}
+{% endblock content %}
