@@ -1,9 +1,16 @@
 # cars-backend-test-task
 
 ## Установка
+### Скачайте исходный код проекта
+Это можно сделать через git или загрузить как zip архив через интерфейс github.
+Пример загрузки через git:
+```shell
+git clone https://github.com/fhw12/cars-backend-test-task
+```
+
 ### Необходимо перейти в каталог проекта
 ```shell
-cd путь_к_проекту
+cd путь_к_проекту/cars-backend-test-task
 ```
 
 ### Установка необходимых библиотек (Linux)
