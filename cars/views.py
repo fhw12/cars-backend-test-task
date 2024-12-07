@@ -15,11 +15,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
+"""
+Permissions helpers
+"""
 class IsOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
@@ -28,6 +26,14 @@ class IsOwner(BasePermission):
 class Disable(BasePermission):
     def has_object_permission(self, request, view, obj):
         return False
+
+
+"""
+ViewSets
+"""
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class CarViewSet(viewsets.ModelViewSet):
@@ -68,15 +74,52 @@ class CommentViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(car=car_id)
 
 
-# index view (car list)
+"""
+Views
+"""
+# Index page (List of cars)
 def index_view(request):
     template = loader.get_template('cars/index.html')
     context = { 'cars': Car.objects.all() }
     return HttpResponse(template.render(context, request))
 
 
-# login action
-def login_view(request):
+# NewCar view (form)
+@login_required
+def new_car(request):
+    template = loader.get_template('cars/new_car.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
+# SignIn view (form)
+def signin_view(request):
+    template = loader.get_template('cars/signin.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
+# SignUp view (form)
+def signup_view(request):
+    template = loader.get_template('cars/signup.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+
+# Car viewer (Card of the car)
+def car_view(request, car_id):
+    car = Car.objects.get(pk=car_id)
+    comments = Comment.objects.filter(car=car.id)
+    template = loader.get_template('cars/car.html')
+    context = { 'car': car, 'comments': comments }
+    return HttpResponse(template.render(context, request))
+
+
+"""
+Handlers
+"""
+# Login handler
+def login_handler(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(request=request, username=username, password=password)
@@ -88,40 +131,41 @@ def login_view(request):
         return HttpResponse('Log in: error')
 
 
-# sign up action
-def reg_view(request):
+# Registration handler
+def reg_handler(request):
     username = request.POST['username']
     password = request.POST['password']
     repeated_password = request.POST['repeated_password']
 
     if not match(r'[a-zA-Z0-9]{4,16}', username):
-        return HttpResponse('Error username')
-    elif not match(r'.{8,}', password) or password != repeated_password:
-        return HttpResponse('Error password')
-    
-    User.objects.create_user(username, '', password)
-  
-    user = authenticate(request=request, username=username, password=password)
+        return HttpResponse('Логин не соответствует шаблону! Допустимые символы: Латиница, Цифры. Длина от 4 до 16 символов.')
+    elif password != repeated_password:
+        return HttpResponse("Пароль и повторный пароль не совпадают!")
+    elif not match(r'.{8,}', password):
+        return HttpResponse('Пароль не соответствует шаблону! Длина пароля должна быть от 8 символов.')
 
-    if user is not None:
+    try:
+        User.objects.get(username=username)
+        return HttpResponse('Пользователь уже существует!')
+    except User.DoesNotExist:
+        User.objects.create_user(username, '', password)
+        user = authenticate(request=request, username=username, password=password)
         login(request, user)
         return redirect('/')
-    else:
-        return HttpResponse('Log in: error')
 
 
-# adds comment
+# AddComment handler
 @login_required
-def add_comment(request, car_id):
+def add_comment_handler(request, car_id):
     content = request.POST['content']
     car = Car.objects.get(pk=car_id)
     comment = Comment.objects.create(car=car, created_at=datetime.datetime.now(), content=content, author=request.user)
     return HttpResponse('done')
 
 
-# adds a new car to database from the new car form
+# AddCar handler
 @login_required
-def add_car(request):
+def add_car_handler(request):
     make = request.POST['make']
     model = request.POST['model']
     year = request.POST['year']
@@ -132,8 +176,10 @@ def add_car(request):
     )
     return HttpResponse('done')
 
+
+# DeleteCar handler
 @login_required
-def delete_car(request, car_id):
+def delete_car_handler(request, car_id):
     car = Car.objects.get(pk=car_id)
 
     if car is None:
@@ -147,9 +193,9 @@ def delete_car(request, car_id):
     return redirect(f'/')
 
 
-# update the car
+# UpdateCar handler
 @login_required
-def edit_car(request, car_id):
+def update_car_handler(request, car_id):
     make = request.POST['make']
     model = request.POST['model']
     year = request.POST['year']
@@ -172,39 +218,8 @@ def edit_car(request, car_id):
     return redirect(f'/car/{car_id}')
 
 
-# new car form
+# Logout handler
 @login_required
-def new_car(request):
-    template = loader.get_template('cars/new_car.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-
-# sign in view
-def signin_view(request):
-    template = loader.get_template('cars/signin.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-
-# sign up view
-def signup_view(request):
-    template = loader.get_template('cars/signup.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-
-# logout action
-@login_required
-def logout_view(request):
+def logout_handler(request):
     logout(request)
     return redirect('/')
-
-
-# car view
-def car_view(request, car_id):
-    car = Car.objects.get(pk=car_id)
-    comments = Comment.objects.filter(car=car.id)
-    template = loader.get_template('cars/car.html')
-    context = { 'car': car, 'comments': comments }
-    return HttpResponse(template.render(context, request))

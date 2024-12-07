@@ -1,7 +1,9 @@
 {% extends "cars/base.html" %}
 {% block content %}
 <style>
-
+    input {
+        padding: 10px;
+    }
 </style>
 
 <p>Информация о публикации:</p>
@@ -18,6 +20,6 @@
 
     <label for="description">Описание:</label>
     <textarea name="description" id="description">{{ car.description }}</textarea><br>
-    <button type="submit" class="action-button">Обновить</button><br><br>
+    <button type="submit" class="action-button">Добавить машину</button><br><br>
 </form>
 {% endblock content %}

@@ -35,7 +35,7 @@ input {
     {% if user == car.owner %}
     <br><a class="action-button" href="/delete-car/{{ car.id }}">Удалить</a>
    
-        <form method="post" action="/edit-car/{{ car.id }}">
+        <form method="post" action="/update-car/{{ car.id }}">
             {% csrf_token %}
             <p>Редактирование:</p>
             <label for="make">Марка:</label>
