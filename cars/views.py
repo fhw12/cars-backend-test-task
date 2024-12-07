@@ -160,7 +160,7 @@ def add_comment_handler(request, car_id):
     content = request.POST['content']
     car = Car.objects.get(pk=car_id)
     comment = Comment.objects.create(car=car, created_at=datetime.datetime.now(), content=content, author=request.user)
-    return HttpResponse('done')
+    return redirect(f'/car/{car_id}')
 
 
 # AddCar handler
@@ -170,26 +170,21 @@ def add_car_handler(request):
     model = request.POST['model']
     year = request.POST['year']
     description = request.POST['description']
-
     car = Car.objects.create(make=make, model=model, year=year, description=description, created_at=datetime.datetime.now(),
         updated_at=datetime.datetime.now(), owner=request.user,
     )
-    return HttpResponse('done')
+    return redirect('/')
 
 
 # DeleteCar handler
 @login_required
 def delete_car_handler(request, car_id):
     car = Car.objects.get(pk=car_id)
-
     if car is None:
-        return HttpResponse('error: car is none')
-
+        return HttpResponse('Ошибка: Данной публикации об автомобиле не существует')
     if car.owner != request.user:
-        return HttpResponse('error: you are not the owner of publication of this car')
-
+        return HttpResponse('Ошибка: Вы не можете удалить публикацию, т.к не являетесь её автором.')
     car.delete()
-
     return redirect(f'/')
 
 
@@ -200,21 +195,16 @@ def update_car_handler(request, car_id):
     model = request.POST['model']
     year = request.POST['year']
     description = request.POST['description']
-    
     car = Car.objects.get(pk=car_id)
-
     if car is None:
-        return HttpResponse('error: car is none')
-    
+            return HttpResponse('Ошибка: Данной публикации об автомобиле не существует')
     if car.owner != request.user:
-        return HttpResponse('error: you are not the owner of publication of this car')
-
+        return HttpResponse('Ошибка: Вы не можете удалить публикацию, т.к не являетесь её автором.')
     car.make = make
     car.model = model
     car.year = year
     car.description = description
     car.save()
-
     return redirect(f'/car/{car_id}')
 
 
