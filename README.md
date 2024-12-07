@@ -13,6 +13,12 @@ pip3 install -r requirements.txt
 Для Windows необходимо использовать pip вместо pip3.
 
 ### Запуск проекта
+Необходимо провести миграции базы данных:
+```shell
+python3 manage.py migrate
+```
+
+Запуск проекта:
 ```shell
 python3 manage.py runserver
 ```

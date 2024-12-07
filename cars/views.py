@@ -131,7 +131,7 @@ def login_handler(request):
         login(request, user)
         return redirect('/')
     else:
-        return HttpResponse('Log in: error')
+        return HttpResponse('Ошибка при входе, возможно не корректный логин или пароль')
 
 
 # Registration handler
