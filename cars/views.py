@@ -43,6 +43,8 @@ class CarViewSet(viewsets.ModelViewSet):
             return [IsAuthenticated(), IsOwner()]
         return super().get_permissions()
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -55,6 +57,15 @@ class CommentViewSet(viewsets.ModelViewSet):
         elif self.action == 'create':
             return [IsAuthenticated()]
         return super().get_permissions()
+
+    def perform_create(self, serializer):
+        car_id = self.kwargs.get('car_id')
+        car = Car.objects.get(pk=car_id)
+        serializer.save(car=car, author=self.request.user)
+
+    def get_queryset(self):
+        car_id = self.kwargs.get('car_id')
+        return self.queryset.filter(car=car_id)
 
 
 # index view (car list)

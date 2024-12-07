@@ -7,13 +7,13 @@ class Car(models.Model):
     model = models.CharField(max_length=100)
     year = models.IntegerField(default=2024)
     description = models.CharField(max_length=1000)
-    created_at = models.DateField()
-    updated_at = models.DateField()
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
 
 
 class Comment(models.Model):
     content = models.CharField(max_length=1000)
-    created_at = models.DateField()
+    created_at = models.DateField(auto_now_add=True)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.PROTECT)

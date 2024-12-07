@@ -6,7 +6,6 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'cars', views.CarViewSet)
-router.register(r'comments', views.CommentViewSet)
 router.register(r'user-detail', views.UserViewSet)
 
 
@@ -27,5 +26,7 @@ urlpatterns = [
     path('add-comment/<int:car_id>', views.add_comment, name='add-comment'),
 
     path('api/', include(router.urls)),
+    path('api/cars/<int:car_id>/comments/', views.CommentViewSet.as_view({'get': 'list', 'post': 'create'}), name='car-comments'),
+    path('api/comments/<int:pk>/', views.CommentViewSet.as_view({'get': 'retrieve'}), name='comment-detail'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
