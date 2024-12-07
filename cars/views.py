@@ -71,7 +71,10 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         car_id = self.kwargs.get('car_id')
-        return self.queryset.filter(car=car_id)
+        if car_id:
+            return self.queryset.filter(car=car_id)
+        else:
+            return self.queryset.all()
 
 
 """

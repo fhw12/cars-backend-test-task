@@ -1,11 +1,27 @@
 # cars-backend-test-task
 
 ## Установка
+### Необходимо находится внутри проекта.
 ```shell
-pip3 install
+cd путь_к_проекту
 ```
 
+### Установка необходимых библиотек (Linux)
+```shell
+pip3 install -r requirements.txt
+```
+Для Windows необходимо использовать pip вместо pip3.
+
+### Запуск проекта
+```shell
+python3 manage.py runserver
+```
+
+
 ## Использование API
+Примеры представлены на языке программирования JavaScript.
+Для проверки работы API перейдите на сайт с машинами и откройте консоль разработчика внутри браузера.
+
 ### Получение всех машин:
 ```javascript
 fetch('http://127.0.0.1:8000/api/cars/', {
@@ -21,7 +37,7 @@ fetch('http://127.0.0.1:8000/api/cars/', {
 
 ### Информация о конкретном автомобиле:
 ```javascript
-let car_id = 5; // Для примера id автомобиля = 5
+car_id = 5; // Для примера id автомобиля = 5
 fetch(`http://127.0.0.1:8000/api/cars/${car_id}`, {
     method: 'GET',
     headers: {
@@ -35,7 +51,7 @@ fetch(`http://127.0.0.1:8000/api/cars/${car_id}`, {
 
 ### Получение комментариев под конкретной публикацией об автомобиле:
 ```javascript
-let car_id = 5; // Для примера id автомобиля = 5
+car_id = 5; // Для примера id автомобиля = 5
 fetch(`http://127.0.0.1:8000/api/cars/${car_id}/comments/`, {
     method: 'GET',
     headers: {
@@ -49,8 +65,8 @@ fetch(`http://127.0.0.1:8000/api/cars/${car_id}/comments/`, {
 
 ### Добавить публикацию об автомобиле:
 ```javascript
-let username = ""; // имя пользователя
-let password = ""; // пароль
+username = ""; // имя пользователя
+password = ""; // пароль
 fetch('http://127.0.0.1:8000/api/cars/', {
     method: 'POST',
     headers: {
@@ -95,9 +111,10 @@ fetch('http://127.0.0.1:8000/api/cars/14/', {
 
 ### Удалить публикацию об автомобиле (Доступно только автору публикации):
 ```javascript
-let username = ""; // имя пользователя
-let password = ""; // пароль
-fetch('http://127.0.0.1:8000/api/cars/14/', {
+username = ""; // имя пользователя
+password = ""; // пароль
+car_id = 1; // id удаляемой публикации
+fetch(`http://127.0.0.1:8000/api/cars/${car_id}/`, {
     method: 'DELETE',
     headers: {
         'Authorization': 'Basic ' + btoa(`${username}:${password}`),
@@ -110,7 +127,7 @@ fetch('http://127.0.0.1:8000/api/cars/14/', {
 ```javascript
 let username = ""; // имя пользователя
 let password = ""; // пароль
-let car_id = 1; // id публикации под которой будет дабавлен комментарий
+let car_id = 1; // id публикации под которой будет добавлен комментарий
 fetch(`http://127.0.0.1:8000/api/cars/${car_id}/comments/`, {
     method: 'POST',
     headers: {
@@ -122,4 +139,7 @@ fetch(`http://127.0.0.1:8000/api/cars/${car_id}/comments/`, {
         "content": "Test comment via API",
     })
 })
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.log(error));
 ```

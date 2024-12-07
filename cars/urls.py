@@ -7,6 +7,7 @@ from . import views
 # router for API paths
 router = routers.DefaultRouter()
 router.register(r'cars', views.CarViewSet)
+router.register(r'comments', views.CommentViewSet)
 router.register(r'user-detail', views.UserViewSet)
 
 
