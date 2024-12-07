@@ -7,7 +7,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'url',
             'id',
             'username',
             'email',
@@ -19,7 +18,6 @@ class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = (
-            'url',
             'id',
             'make',
             'model',
@@ -36,7 +34,6 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = (
-            'url',
             'id',
             'content',
             'created_at',
